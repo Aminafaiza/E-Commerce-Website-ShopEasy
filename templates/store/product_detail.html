@@ -1,0 +1,209 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} | ShopEasy{% endblock %}
+
+{% block content %}
+
+<section class="product-detail-section py-5">
+
+    <div class="container">
+
+        <!-- BREADCRUMB -->
+        <div class="mb-4">
+            <a href="{% url 'home' %}" class="text-decoration-none text-muted">
+                Home
+            </a>
+
+            <span class="mx-2">/</span>
+
+            <span>{{ product.name }}</span>
+        </div>
+
+
+        <div class="row g-5 align-items-start">
+
+            <!-- PRODUCT IMAGE -->
+            <div class="col-lg-6">
+
+                <div class="product-detail-image">
+
+                    {% if product.image %}
+
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                            class="img-fluid w-100">
+
+                    {% else %}
+
+                        <div class="product-placeholder">
+                            <i class="bi bi-image"></i>
+                            <p>IMAGE NOT AVAILABLE</p>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+            <div class="col-lg-6">
+
+                <span class="eyebrow">
+                    PRODUCT DETAILS
+                </span>
+
+                <h1 class="mt-3 mb-3">
+                    {{ product.name }}
+                </h1>
+
+
+                <!-- CATEGORY -->
+                <p class="text-muted">
+
+                    {% if product.category %}
+                        {{ product.category.name }}
+                    {% else %}
+                        General Collection
+                    {% endif %}
+
+                </p>
+
+
+                <!-- PRICE -->
+                <h2 class="product-detail-price mb-4">
+                    ₹{{ product.price|floatformat:2 }}
+                </h2>
+
+
+                <hr>
+
+
+                <!-- DESCRIPTION -->
+                <h5 class="mt-4">Product Description</h5>
+
+                <p class="text-muted">
+                    {{ product.description|default:"No description available for this product."|linebreaksbr }}
+                </p>
+
+
+                <!-- SELLER -->
+                <div class="mt-4">
+
+                    <span class="text-muted">
+                        Sold by:
+                    </span>
+
+                    <strong>
+                        {{ product.seller.username }}
+                    </strong>
+
+                </div>
+
+
+                <!-- STOCK AVAILABILITY -->
+                <div class="mt-4">
+
+                    {% if product.stock > 0 %}
+
+                        <span class="badge bg-success p-2">
+                            <i class="bi bi-check-circle"></i>
+                            IN STOCK
+                        </span>
+
+                        <p class="text-muted mt-2">
+                            {{ product.stock }} item(s) available.
+                        </p>
+
+                    {% else %}
+
+                        <span class="badge bg-danger p-2">
+                            <i class="bi bi-x-circle"></i>
+                            OUT OF STOCK
+                        </span>
+
+                        <p class="text-danger mt-2">
+                            Sorry! This product is currently unavailable.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ADD TO CART -->
+                <div class="mt-4">
+
+                    {% if user.is_authenticated and user.role == 'buyer' %}
+
+                        {% if product.stock > 0 %}
+
+                            <form method="POST"
+                                  action="{% url 'add_to_cart' product.id %}">
+
+                                {% csrf_token %}
+
+                                <button type="submit"
+                                        class="luxury-add-cart-button">
+
+                                    <i class="bi bi-bag-plus me-2"></i>
+                                    ADD TO CART
+
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <button type="button"
+                                    class="luxury-add-cart-button"
+                                    disabled>
+
+                                <i class="bi bi-x-circle me-2"></i>
+                                OUT OF STOCK
+
+                            </button>
+
+                        {% endif %}
+
+                    {% elif not user.is_authenticated %}
+
+                        <a href="{% url 'login' %}"
+                           class="luxury-add-cart-button text-decoration-none">
+
+                            <i class="bi bi-person me-2"></i>
+                            LOGIN TO PURCHASE
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- BACK TO SHOP -->
+                <div class="mt-4">
+
+                    <a href="{% url 'home' %}"
+                       class="btn btn-outline-dark">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+                        CONTINUE SHOPPING
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

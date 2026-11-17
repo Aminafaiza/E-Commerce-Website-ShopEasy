@@ -1,0 +1,194 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- PAGE HEADER -->
+
+    <div class="mb-5">
+        <p class="text-uppercase text-secondary small mb-2">
+            Your ShopEasy Account
+        </p>
+
+        <h1 class="fw-bold">My Orders</h1>
+
+        <p class="text-muted">
+            View your purchases and track your deliveries.
+        </p>
+    </div>
+
+
+    {% if orders %}
+
+        {% for order in orders %}
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4">
+
+                    <!-- ORDER HEADER -->
+
+                    <div class="d-flex justify-content-between
+                                align-items-center flex-wrap gap-3">
+
+                        <div>
+                            <h5 class="fw-bold mb-1">
+                                Order #{{ order.id }}
+                            </h5>
+
+                            <small class="text-muted">
+                                Placed on:
+                                {{ order.created_at|date:"d M Y, h:i A" }}
+                            </small>
+                        </div>
+
+                        <div class="text-end">
+                            <h5 class="fw-bold mb-1">
+                                ₹{{ order.total_amount|floatformat:2 }}
+                            </h5>
+
+                            <small class="text-muted">
+                                {{ order.get_payment_method_display }}
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+
+                    <!-- ORDER PRODUCTS -->
+
+                    <h6 class="fw-bold mb-3">Purchased Products</h6>
+
+                    {% for item in order.items.all %}
+
+                        <div class="row align-items-center
+                                    border-bottom py-3 g-3">
+
+                            <div class="col-md-7">
+
+                                <h6 class="fw-semibold mb-1">
+                                    {{ item.product_name }}
+                                </h6>
+
+                                <small class="text-muted">
+                                    Quantity: {{ item.quantity }}
+                                </small>
+
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <strong>
+                                    ₹{{ item.subtotal|floatformat:2 }}
+                                </strong>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                {% if item.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+
+                                {% elif item.status == 'confirmed' %}
+                                    <span class="badge bg-info text-dark">
+                                        Confirmed
+                                    </span>
+
+                                {% elif item.status == 'processing' %}
+                                    <span class="badge bg-primary">
+                                        Processing
+                                    </span>
+
+                                {% elif item.status == 'shipped' %}
+                                    <span class="badge bg-secondary">
+                                        Shipped
+                                    </span>
+
+                                {% elif item.status == 'delivered' %}
+                                    <span class="badge bg-success">
+                                        Delivered
+                                    </span>
+
+                                {% elif item.status == 'cancelled' %}
+                                    <span class="badge bg-danger">
+                                        Cancelled
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    {% empty %}
+
+                        <p class="text-muted">
+                            No products found for this order.
+                        </p>
+
+                    {% endfor %}
+
+
+                    <!-- ORDER FOOTER -->
+
+                    <div class="d-flex justify-content-between
+                                align-items-center flex-wrap gap-2 mt-4">
+
+                        <span class="text-muted small">
+                            Delivery to: {{ order.city }}, {{ order.state }}
+                        </span>
+
+                        <a href="{% url 'buyer_order_detail' order.id %}"
+                           class="btn btn-dark btn-sm">
+
+                            <i class="bi bi-eye me-2"></i>
+                            View Order Details
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <!-- EMPTY ORDER HISTORY -->
+
+        <div class="text-center py-5">
+
+            <i class="bi bi-bag-x text-secondary"
+               style="font-size: 65px;"></i>
+
+            <h3 class="fw-bold mt-3">
+                No Orders Yet
+            </h3>
+
+            <p class="text-muted">
+                You haven't placed any orders yet.
+                Explore our products and start shopping!
+            </p>
+
+            <a href="{% url 'home' %}"
+               class="btn btn-dark mt-3 px-4">
+
+                Explore Products
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

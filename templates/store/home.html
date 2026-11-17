@@ -1,0 +1,517 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ShopEasy | Online Shopping{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="luxury-hero">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+                <div class="hero-content">
+
+                    <span class="eyebrow">WELCOME TO SHOPEASY</span>
+
+                    <h1>
+                        Discover Products
+                        <em>You'll Love</em>
+                    </h1>
+
+                    <p>
+                        Explore a thoughtfully selected collection of
+                        products across different categories. Experience
+                        convenient shopping with ShopEasy.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#products" class="luxury-button">
+                            EXPLORE PRODUCTS
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <span class="hero-note">
+                        THE ART OF EVERYDAY LIVING
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="hero-visual">
+
+                   <img
+    src="/media/ShopEasy Luxury Shopping Collection.png"
+    alt="ShopEasy collection"
+    class="hero-main-image"
+>
+
+                    <div class="hero-image-caption">
+                        <span>DISCOVER MORE</span>
+                        <strong>Everyday Essentials</strong>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= TRUST STRIP ================= -->
+<section class="trust-strip">
+    <div class="container">
+        <div class="row g-3">
+
+            <div class="col-6 col-lg-3">
+                <i class="bi bi-award"></i>
+                <span>QUALITY PRODUCTS</span>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <i class="bi bi-truck"></i>
+                <span>CONVENIENT SHOPPING</span>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <i class="bi bi-shield-check"></i>
+                <span>TRUSTED SELLERS</span>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <i class="bi bi-heart"></i>
+                <span>MADE FOR EVERYDAY</span>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= COLLECTIONS ================= -->
+<section class="collection-section">
+    <div class="container">
+
+        <div class="section-topline">
+            <div>
+                <span class="eyebrow">EXPLORE</span>
+                <h2>Shop by Category</h2>
+                <p>Find something special in every collection.</p>
+            </div>
+
+            <a href="#products" class="text-link">
+                VIEW PRODUCTS <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="row">
+
+            {% for category in categories %}
+
+                <div class="col-6 col-md-4 col-lg-3 mb-4">
+
+                    <a href="#products" class="collection-card">
+
+                        <div class="collection-card-image">
+
+                            <div class="collection-placeholder">
+                                <i class="bi bi-grid"></i>
+                            </div>
+
+                            <div class="collection-overlay">
+                                EXPLORE
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="collection-card-info">
+                            <h5>{{ category.name }}</h5>
+
+                            <span>
+                                DISCOVER COLLECTION
+                            </span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-12 text-center">
+                    <p>No categories available yet.</p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= EDITORIAL BANNER ================= -->
+<section class="editorial-banner">
+
+    <div class="editorial-banner-image"></div>
+
+    <div class="container">
+        <div class="editorial-content">
+
+            <span class="eyebrow">
+                THE SHOPEASY COLLECTION
+            </span>
+
+            <h2>
+                Find Something
+                Special.
+            </h2>
+
+            <p>
+                Discover products that make everyday living
+                more comfortable, convenient and beautiful.
+            </p>
+
+            <a href="#products" class="light-button">
+                EXPLORE THE COLLECTION
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURED PRODUCTS ================= -->
+<section class="featured-products" id="products">
+
+    <div class="container">
+
+        <div class="section-topline">
+
+            <div>
+                <span class="eyebrow">CURATED FOR YOU</span>
+
+                <h2>Featured Products</h2>
+
+                <p>
+                    Explore our latest collection of products.
+                </p>
+            </div>
+
+            <span class="text-link">
+                SHOPEASY COLLECTION
+            </span>
+
+        </div>
+
+
+        <!-- PRODUCT SEARCH -->
+        <form method="GET" action="{% url 'home' %}" class="luxury-search">
+
+            <i class="bi bi-search"></i>
+
+            <input
+                type="text"
+                name="q"
+                placeholder="Search for products..."
+                value="{{ search_query }}"
+            >
+
+            <button type="submit">
+                SEARCH
+            </button>
+
+        </form>
+
+
+        {% if search_query %}
+            <p class="search-result-label">
+                Search results for: <strong>{{ search_query }}</strong>
+                <a href="{% url 'home' %}" class="text-link ms-2">
+                    CLEAR SEARCH
+                </a>
+            </p>
+        {% endif %}
+
+
+        <!-- PRODUCT GRID -->
+        <div class="row g-4">
+
+            {% for product in products %}
+
+                <div class="col-6 col-lg-4 col-xl-3">
+
+                    <div class="luxury-product-card">
+
+                        <!-- PRODUCT IMAGE -->
+                        <div class="luxury-product-image">
+
+                            <a href="{% url 'product_detail' product.id %}">
+
+                                {% if product.image %}
+
+                                    <img
+                                        src="{{ product.image.url }}"
+                                        alt="{{ product.name }}"
+                                    >
+
+                                {% else %}
+
+                                    <div class="product-placeholder">
+                                        <i class="bi bi-image"></i>
+                                        <span>IMAGE NOT AVAILABLE</span>
+                                    </div>
+
+                                {% endif %}
+
+                            </a>
+
+
+                            <!-- STOCK STATUS -->
+                            {% if product.stock > 0 %}
+
+                                <span class="product-status">
+                                    <i class="bi bi-check-circle"></i>
+                                    IN STOCK — {{ product.stock }} AVAILABLE
+                                </span>
+
+                            {% else %}
+
+                                <span class="product-status unavailable">
+                                    <i class="bi bi-x-circle"></i>
+                                    OUT OF STOCK
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- PRODUCT DETAILS -->
+                        <div class="luxury-product-details">
+
+                            {% if product.category %}
+                                <span class="product-category-label">
+                                    {{ product.category.name|upper }}
+                                </span>
+                            {% endif %}
+
+                            <h5>{{ product.name }}</h5>
+
+                            <p class="luxury-product-description">
+                                {{ product.description|truncatewords:12 }}
+                            </p>
+
+
+                            <!-- PRICE AND DETAILS -->
+                            <div class="product-bottom">
+
+                                <div>
+                                    <span class="price-label">
+                                        PRICE
+                                    </span>
+
+                                    <h4>₹{{ product.price }}</h4>
+                                </div>
+
+                                <a
+                                    href="{% url 'product_detail' product.id %}"
+                                    class="product-arrow"
+                                    aria-label="View {{ product.name }}"
+                                >
+                                    <i class="bi bi-arrow-up-right"></i>
+                                </a>
+
+                            </div>
+
+
+                            <!-- SELLER INFORMATION -->
+                            <p class="seller-credit">
+                                SOLD BY: {{ product.seller.username|upper }}
+                            </p>
+
+
+                            <!-- ADD TO CART -->
+                            <div class="product-cart-action">
+
+                                {% if user.is_authenticated and user.role == 'buyer' %}
+
+                                    {% if product.stock > 0 %}
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'add_to_cart' product.id %}"
+                                        >
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="luxury-add-cart-button"
+                                            >
+                                                <i class="bi bi-bag-plus"></i>
+                                                ADD TO CART
+                                            </button>
+
+                                        </form>
+
+                                    {% else %}
+
+                                        <button
+                                            type="button"
+                                            class="luxury-add-cart-button"
+                                            disabled
+                                        >
+                                            <i class="bi bi-x-circle"></i>
+                                            OUT OF STOCK
+                                        </button>
+
+                                    {% endif %}
+
+
+                                {% elif not user.is_authenticated %}
+
+                                    {% if product.stock > 0 %}
+
+                                        <a
+                                            href="{% url 'login' %}"
+                                            class="luxury-add-cart-button"
+                                        >
+                                            <i class="bi bi-person"></i>
+                                            LOGIN TO BUY
+                                        </a>
+
+                                    {% else %}
+
+                                        <button
+                                            type="button"
+                                            class="luxury-add-cart-button"
+                                            disabled
+                                        >
+                                            OUT OF STOCK
+                                        </button>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <!-- EMPTY PRODUCT STATE -->
+                <div class="col-12">
+
+                    <div class="luxury-empty-state">
+
+                        <i class="bi bi-bag"></i>
+
+                        <h3>No Products Found</h3>
+
+                        {% if search_query %}
+
+                            <p>
+                                No products match
+                                "{{ search_query }}".
+                                Try searching for something else.
+                            </p>
+
+                            <a
+                                href="{% url 'home' %}"
+                                class="luxury-button"
+                            >
+                                VIEW ALL PRODUCTS
+                            </a>
+
+                        {% else %}
+
+                            <p>
+                                Products will appear here when sellers
+                                add them to ShopEasy.
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SELLER INVITATION ================= -->
+{% if not user.is_authenticated or user.role == 'buyer' %}
+
+<section class="seller-invitation">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <span class="eyebrow">GROW WITH SHOPEASY</span>
+
+                <h2>Want to Sell Your Products?</h2>
+
+                <p>
+                    Join our marketplace as a seller. Add your products,
+                    manage your inventory and handle customer orders
+                    through your own seller dashboard.
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+
+                {% if user.is_authenticated %}
+
+                    <a
+                        href="{% url 'seller_dashboard' %}"
+                        class="dark-outline-button"
+                    >
+                        SELLER DASHBOARD
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="dark-outline-button"
+                    >
+                        BECOME A SELLER
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+{% endblock %}

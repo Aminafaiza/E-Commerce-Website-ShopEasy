@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Checkout</h2>
+        <p class="text-muted">Complete your delivery details to place your order.</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Delivery Information -->
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm p-4">
+
+                <h4 class="mb-4">Delivery Information</h4>
+
+                <form method="POST" action="{% url 'place_order' %}">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input
+                            type="text"
+                            name="full_name"
+                            class="form-control"
+                            value="{{ request.user.get_full_name }}"
+                            maxlength="150"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            class="form-control"
+                            maxlength="15"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Delivery Address</label>
+                        <textarea
+                            name="address"
+                            class="form-control"
+                            rows="3"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">City</label>
+                            <input
+                                type="text"
+                                name="city"
+                                class="form-control"
+                                maxlength="100"
+                                required
+                            >
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">State</label>
+                            <input
+                                type="text"
+                                name="state"
+                                class="form-control"
+                                maxlength="100"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Postal Code</label>
+                        <input
+                            type="text"
+                            name="postal_code"
+                            class="form-control"
+                            maxlength="10"
+                            required
+                        >
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mb-3">Payment Method</h5>
+
+                    <div class="form-check border rounded p-3 mb-4">
+                        <input
+                            class="form-check-input ms-0 me-2"
+                            type="radio"
+                            name="payment_method"
+                            value="cod"
+                            checked
+                            disabled
+                        >
+                        <label class="form-check-label">
+                            Cash on Delivery
+                            <small class="text-muted d-block">
+                                Pay when your order is delivered.
+                            </small>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark btn-lg w-100">
+                        <i class="bi bi-bag-check me-2"></i>
+                        Place Order
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-sm p-4">
+
+                <h4 class="mb-4">Order Summary</h4>
+
+                {% for item in cart_items %}
+
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <div>
+                            <strong>{{ item.product.name }}</strong>
+                            <div class="text-muted small">
+                                Quantity: {{ item.quantity }}
+                            </div>
+                        </div>
+
+                        <span>
+                            ₹{{ item.subtotal|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+                    <strong>Total Amount</strong>
+                    <h4 class="fw-bold">
+                        ₹{{ total|floatformat:2 }}
+                    </h4>
+                </div>
+
+                <p class="text-muted small mt-3">
+                    Your order will be placed after you submit the delivery form.
+                </p>
+
+                <a href="{% url 'cart' %}" class="btn btn-outline-secondary w-100">
+                    Back to Cart
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

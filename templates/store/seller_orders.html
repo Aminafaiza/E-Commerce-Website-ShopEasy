@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- PAGE HEADER -->
+
+    <div class="mb-5">
+        <p class="text-uppercase text-secondary small mb-2">
+            Seller Dashboard
+        </p>
+
+        <h1 class="fw-bold">Customer Orders</h1>
+
+        <p class="text-muted">
+            View your sold products and manage their delivery status.
+        </p>
+    </div>
+
+    <!-- ORDER LIST -->
+
+    {% if orders %}
+
+        <div class="row g-4">
+
+            {% for item in orders %}
+
+                <div class="col-12">
+
+                    <div class="card border-0 shadow-sm">
+
+                        <div class="card-body p-4">
+
+                            <!-- ORDER HEADER -->
+
+                            <div class="d-flex justify-content-between
+                                        flex-wrap gap-2 mb-3">
+
+                                <div>
+                                    <h5 class="fw-bold mb-1">
+                                        Order #{{ item.order.id }}
+                                    </h5>
+
+                                    <small class="text-muted">
+                                        Placed on:
+                                        {{ item.order.created_at|date:"d M Y, h:i A" }}
+                                    </small>
+                                </div>
+
+                                <span class="badge bg-dark align-self-start">
+                                    {{ item.get_status_display }}
+                                </span>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="row g-4">
+
+                                <!-- PRODUCT INFORMATION -->
+
+                                <div class="col-md-5">
+
+                                    <h6 class="text-muted mb-3">
+                                        PRODUCT DETAILS
+                                    </h6>
+
+                                    <div class="d-flex gap-3 align-items-center">
+
+                                        {% if item.product and item.product.image %}
+
+                                            <img
+                                                src="{{ item.product.image.url }}"
+                                                alt="{{ item.product_name }}"
+                                                style="width:90px;height:90px;
+                                                       object-fit:cover;"
+                                                class="rounded"
+                                            >
+
+                                        {% endif %}
+
+                                        <div>
+
+                                            <h6 class="fw-bold mb-1">
+                                                {{ item.product_name }}
+                                            </h6>
+
+                                            <p class="text-muted small mb-1">
+                                                Quantity: {{ item.quantity }}
+                                            </p>
+
+                                            <p class="text-muted small mb-1">
+                                                Unit Price:
+                                                ₹{{ item.price|floatformat:2 }}
+                                            </p>
+
+                                            <h6 class="fw-bold">
+                                                ₹{{ item.subtotal|floatformat:2 }}
+                                            </h6>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- BUYER INFORMATION -->
+
+                                <div class="col-md-4">
+
+                                    <h6 class="text-muted mb-3">
+                                        BUYER DETAILS
+                                    </h6>
+
+                                    <p class="mb-1">
+                                        <strong>
+                                            {{ item.order.full_name }}
+                                        </strong>
+                                    </p>
+
+                                    <p class="text-muted small mb-1">
+                                        {{ item.order.phone }}
+                                    </p>
+
+                                    <p class="text-muted small mb-1">
+                                        {{ item.order.address }}
+                                    </p>
+
+                                    <p class="text-muted small">
+                                        {{ item.order.city }},
+                                        {{ item.order.state }}
+                                        - {{ item.order.postal_code }}
+                                    </p>
+
+                                </div>
+
+                                <!-- STATUS UPDATE -->
+
+                                <div class="col-md-3">
+
+                                    <h6 class="text-muted mb-3">
+                                        UPDATE STATUS
+                                    </h6>
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'update_order_status' item.id %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <select
+                                            name="status"
+                                            class="form-select mb-3"
+                                            required
+                                        >
+
+                                            {% for value, label in item.STATUS_CHOICES %}
+
+                                                <option
+                                                    value="{{ value }}"
+                                                    {% if item.status == value %}
+                                                        selected
+                                                    {% endif %}
+                                                >
+                                                    {{ label }}
+                                                </option>
+
+                                            {% endfor %}
+
+                                        </select>
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-dark w-100"
+                                        >
+                                            Update Status
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- EMPTY ORDERS -->
+
+        <div class="text-center py-5">
+
+            <div class="mb-3">
+                <i class="bi bi-box-seam"
+                   style="font-size:60px;"></i>
+            </div>
+
+            <h3 class="fw-bold">No Orders Yet</h3>
+
+            <p class="text-muted">
+                When customers purchase your products,
+                their orders will appear here.
+            </p>
+
+            <a href="{% url 'seller_dashboard' %}"
+               class="btn btn-dark mt-3">
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
