@@ -1248,3 +1248,86 @@ h1, h2, h3, h4, h5 {
     background: #dc3545;
     color: white;
 }
+
+
+/* ==========================================
+   SHOPEASY - PRODUCT CARD ALIGNMENT FIX
+========================================== */
+
+/* Maintain equal product card heights */
+.luxury-product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Consistent product image area */
+.luxury-product-image {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* Keep product images properly fitted */
+.luxury-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Position stock badge consistently */
+.luxury-product-image .product-status {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 3;
+    display: inline-block;
+    max-width: calc(100% - 24px);
+    white-space: normal;
+}
+
+/* Equal product details layout */
+.luxury-product-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 17px;
+}
+
+/* Keep product descriptions consistent */
+.luxury-product-description {
+    min-height: 35px;
+}
+
+/* Push cart button to the bottom */
+.product-cart-action {
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+/* Consistent cart buttons */
+.luxury-add-cart-button {
+    width: 100%;
+    min-height: 43px;
+}
+
+/* Responsive image heights */
+@media (max-width: 767px) {
+    .luxury-product-image {
+        height: 175px;
+    }
+
+    .luxury-product-details {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .luxury-product-image {
+        height: 145px;
+    }
+}
